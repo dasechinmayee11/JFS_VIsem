@@ -1,14 +1,17 @@
-      
 function showDetails() {
-    let name = document.getElementById("nameSelect").value;
+
+    // Prevent showing info if user pressed NO
+    if (!allowChange) return;
+
+    // Use selectedName stored earlier
+    let name = selectedName;
 
     let photo = document.getElementById("photo");
     let info = document.getElementById("infoText");
 
     // Remove frame before adding new one
     photo.classList.remove("photo-james");
-	//photo-james-blue
-	 photo.classList.remove("photo-james-blue");
+    photo.classList.remove("photo-james-blue");
 
     // Mapping names to photos
     let photos = {
@@ -26,7 +29,7 @@ function showDetails() {
         "linus_torvalds": "images/linus_torvalds.jpeg",
         "tim_berner": "images/tim_berner.jpg",
         "Sundar_Pichai": "images/Sundar_Pichai.jpg",
-        "satyanadella": "images/satyanadella.jpg",                
+        "satyanadella": "images/satyanadella.jpg",
         "AdaLovelace": "images/AdaLovelace.jpg",
         "madhu": "images/madhu.jpg"
     };
@@ -61,11 +64,9 @@ function showDetails() {
     photo.style.display = "block";
     info.innerHTML = details[name];
 
-    // ⭐ Apply special frame ONLY for Elon Musk
+    // ⭐ Apply special frame ONLY for James Gosling
     if (name === "james") {
         photo.classList.add("photo-james");
-		photo.classList.add("photo-james-blue");
+        photo.classList.add("photo-james-blue");
     }
 }
-
-        

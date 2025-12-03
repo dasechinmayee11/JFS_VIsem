@@ -1,65 +1,135 @@
- <style>
-        body {
-            font-family: Arial;
-            margin: 40px;
-        }
+/* Your existing CSS (unchanged) */
+body {
+    font-family: Arial;
+    margin: 40px;
+}
 
-        #searchBox {
-            width: 300px;
-            height: 35px;
-            font-size: 16px;
-            padding-left: 10px;
-            margin-bottom: 12px;
-        }
+#searchBox {
+    width: 300px;
+    height: 35px;
+    font-size: 16px;
+    padding-left: 10px;
+    margin-bottom: 12px;
+}
 
-        .container {
-            display: flex;
-            margin-top: 30px;
-            gap: 40px;
-        }
+.container {
+    display: flex;
+    margin-top: 30px;
+    gap: 40px;
+}
 
-        .photo-box, .info-box {
-            width: 45%;
-            padding: 20px;
-            border: 2px solid #333;
-            border-radius: 10px;
-            min-height: 260px;
-        }
+.photo-box, .info-box {
+    width: 45%;
+    padding: 20px;
+    border: 2px solid #333;
+    border-radius: 10px;
+    min-height: 260px;
+}
 
-        #photo {
-            width: 220px;
-            height: 220px;
-            border-radius: 25%;
-            object-fit: cover;
-            border: 2px solid #444;
-            display: none;
-        }
-		.photo-james {
-			border: 6px solid gold !important; 
-			padding: 5px;
-			border-radius: 0 !important;   /* Makes it RECTANGLE */
-			width: 240px !important;
-			height: 260px !important;
-		}
+#photo {
+    width: 220px;
+    height: 220px;
+    border-radius: 25%;
+    object-fit: cover;
+    border: 2px solid #444;
+    display: none;
+}
 
-		.photo-james-blue {
-			width: 240px !important;
-			height: 260px !important;
-			border: 6px solid #1e90ff !important;
-			padding: 5px;
-			border-radius: 0 !important;
-			box-shadow: 0 0 20px #1e90ff;
-			animation: jamesBlueGlow 1s infinite alternate ease-in-out;
-		}
+.photo-james {
+    border: 6px solid gold !important; 
+    padding: 5px;
+    border-radius: 0 !important;
+    width: 240px !important;
+    height: 260px !important;
+}
 
-		@keyframes jamesBlueGlow {
-			0%   { box-shadow: 0 0 10px #1e90ff; }
-			100% { box-shadow: 0 0 40px #1e90ff, 0 0 80px #00bfff; }
-		}
+.photo-james-blue {
+    width: 240px !important;
+    height: 260px !important;
+    border: 6px solid #1e90ff !important;
+    padding: 5px;
+    border-radius: 0 !important;
+    box-shadow: 0 0 20px #1e90ff;
+    animation: jamesBlueGlow 1s infinite alternate ease-in-out;
+}
+
+@keyframes jamesBlueGlow {
+    0%   { box-shadow: 0 0 10px #1e90ff; }
+    100% { box-shadow: 0 0 40px #1e90ff, 0 0 80px #00bfff; }
+}
+
+.title {
+    font-weight: bold;
+    font-size: 18px;
+}
 
 
-        .title {
-            font-weight: bold;
-            font-size: 18px;
-        }
-    </style>
+/* ----------------------------------------------------
+   NEW CSS FOR OK BUTTON + CONFIRM YES/NO BOX STARTS HERE
+---------------------------------------------------- */
+
+/* OK Button */
+#okBtn {
+    padding: 10px 22px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #1e90ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: none;
+    margin-left: 10px;
+    transition: 0.2s;
+}
+
+#okBtn:hover {
+    background-color: #0a75d6;
+}
+
+/* Confirm Box */
+#confirmBox {
+    width: 320px;
+    margin-top: 15px;
+    padding: 15px;
+    border: 2px solid #333;
+    background: #f7f7f7;
+    border-radius: 10px;
+    display: none;
+}
+
+#confirmBox p {
+    margin-bottom: 10px;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+#confirmBox button {
+    padding: 8px 20px;
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 15px;
+}
+
+/* YES button */
+#confirmBox button:first-child {
+    background-color: #28a745;
+    color: white;
+}
+
+#confirmBox button:first-child:hover {
+    background-color: #1e7e34;
+}
+
+/* NO button */
+#confirmBox button:last-child {
+    background-color: #dc3545;
+    color: white;
+}
+
+#confirmBox button:last-child:hover {
+    background-color: #b02a37;
+}
