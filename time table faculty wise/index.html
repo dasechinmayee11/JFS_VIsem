@@ -3,7 +3,6 @@
 <head>
     <title>Faculty Timetable</title>
 
-    <!-- PapaParse CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
     <style>
@@ -29,9 +28,14 @@
             font-size: 20px;
             margin-top: 30px;
         }
-        input, button {
+        select {
             padding: 6px 10px;
-            margin: 5px;
+            margin: 10px 0;
+        }
+        /* SUB 2 Highlight */
+        .sub2 {
+            background-color: #ffe599;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -40,21 +44,19 @@
 
 <h2>Faculty Timetable</h2>
 
-<!-- CSV Upload -->
 <input type="file" id="csvFile" accept=".csv">
-
 <br><br>
 
-<!-- Faculty Search -->
-<label><b>Enter Faculty Name:</b></label>
-<input type="text" id="facultySearch" placeholder="Type faculty name">
-<button onclick="searchFaculty()">Search</button>
-<button onclick="showAll()">Show All</button>
+<label><b>Select Faculty:</b></label>
+<select id="facultySelect" onchange="filterFaculty()">
+    <option value="ALL">All Faculties</option>
+</select>
 
 <div id="tables"></div>
 
 <script>
-let fullTimetable = {}; // store complete timetable
+let fullTimetable = {};
+let facultySet = new Set();
 
 document.getElementById("csvFile").addEventListener("change", function () {
     Papa.parse(this.files[0], {
@@ -68,16 +70,19 @@ document.getElementById("csvFile").addEventListener("change", function () {
 
 function processCSV(data) {
     const timetable = {};
+    facultySet.clear();
 
     data.forEach(row => {
         const faculty = row["FACULTY"];
         const day = row["DAY"];
-        const session = row["SESSION"]; // FN / AN
+        const session = row["SESSION"];
         const batch = row["BATCH"];
         const course = row["COURSE"];
         const room = row["ROOM"];
 
         if (!faculty || !day || !session) return;
+
+        facultySet.add(faculty);
 
         if (!timetable[faculty]) {
             timetable[faculty] = {};
@@ -86,12 +91,32 @@ function processCSV(data) {
             timetable[faculty][day] = { FN: "", AN: "" };
         }
 
+        const isSub2 = batch && batch.endsWith("B2");
+        const cellClass = isSub2 ? "sub2" : "";
+
         timetable[faculty][day][session] =
-            `Batch: ${batch}<br>${course}<br>Room: ${room}`;
+            `<div class="${cellClass}">
+                Batch: ${batch}<br>
+                ${course}<br>
+                Room: ${room}
+            </div>`;
     });
 
     fullTimetable = timetable;
+    populateFacultyDropdown();
     buildTables(timetable);
+}
+
+function populateFacultyDropdown() {
+    const select = document.getElementById("facultySelect");
+    select.innerHTML = `<option value="ALL">All Faculties</option>`;
+
+    facultySet.forEach(faculty => {
+        const option = document.createElement("option");
+        option.value = faculty;
+        option.textContent = faculty;
+        select.appendChild(option);
+    });
 }
 
 function buildTables(timetable) {
@@ -104,10 +129,9 @@ function buildTables(timetable) {
 
         const title = document.createElement("div");
         title.className = "faculty-title";
-        title.innerHTML = `Faculty: ${faculty}`;
+        title.textContent = `Faculty: ${faculty}`;
 
         const table = document.createElement("table");
-        table.id = `table_${faculty}`;
 
         let html = `
             <tr>
@@ -119,40 +143,29 @@ function buildTables(timetable) {
         `;
 
         days.forEach(day => {
-            const fn = timetable[faculty][day]?.FN || "";
-            const an = timetable[faculty][day]?.AN || "";
             html += `
                 <tr>
                     <td>${day}</td>
-                    <td>${fn}</td>
-                    <td>${an}</td>
+                    <td>${timetable[faculty][day]?.FN || ""}</td>
+                    <td>${timetable[faculty][day]?.AN || ""}</td>
                 </tr>
             `;
         });
 
         table.innerHTML = html;
-
         container.appendChild(title);
         container.appendChild(table);
     }
 }
 
-function searchFaculty() {
-    const name = document.getElementById("facultySearch").value.trim().toLowerCase();
-    const filtered = {};
+function filterFaculty() {
+    const selected = document.getElementById("facultySelect").value;
 
-    for (const faculty in fullTimetable) {
-        if (faculty.toLowerCase().includes(name)) {
-            filtered[faculty] = fullTimetable[faculty];
-        }
+    if (selected === "ALL") {
+        buildTables(fullTimetable);
+    } else {
+        buildTables({ [selected]: fullTimetable[selected] });
     }
-
-    buildTables(filtered);
-}
-
-function showAll() {
-    document.getElementById("facultySearch").value = "";
-    buildTables(fullTimetable);
 }
 </script>
 
